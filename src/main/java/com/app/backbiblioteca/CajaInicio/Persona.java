@@ -6,8 +6,17 @@ import jakarta.persistence.validation.constraints.*;
 public class Persona{
 @Id
 private String idpersona;
+	@NotBlank(message="El nombre es obligatorio")
+	@Column(nullable=false, length = 80)
 	private String Nombre;
+	
+	@NotBlank(message="La contrasenna  es obligatorio")
+	@Column(nullable=false, length = 80)
+	
 	private String Contrasenna;
+
+	
+	
 	private String Detalles;
 	
 	publiic Persona(){}
