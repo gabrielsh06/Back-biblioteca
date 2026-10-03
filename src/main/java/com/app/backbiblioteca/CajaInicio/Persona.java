@@ -40,7 +40,7 @@ return this.Contrasenna;
 }
 
 		public void setContrasenna(String Contrasenna){
-		this.Contrasenna =	Contrasenna}
+		this.Contrasenna =	Contrasenna;}
 	
 	
 	public String getDetalles(){
@@ -48,7 +48,7 @@ return this.Contrasenna;
 	return this.Detalles;
 	}
 	
-	public void setDetalles(){
+	public void setDetalles(String Detalles){
 		this.Detalles = Detalles;
 	}
 	

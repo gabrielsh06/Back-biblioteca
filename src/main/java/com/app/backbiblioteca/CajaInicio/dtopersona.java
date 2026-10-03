@@ -5,7 +5,7 @@ import jakarta.persistence.validation.constraints.*;
 public class dtopersona{
 	
 	
-		@NotBlank(message="El nombre es obligatorio")
+		@NotBlank(message="la id es obligatorio")
 private String idpersona;
 	@NotBlank(message="El nombre es obligatorio")
 	private String Nombre;

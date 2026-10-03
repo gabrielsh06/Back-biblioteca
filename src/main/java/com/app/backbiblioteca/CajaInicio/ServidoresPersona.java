@@ -15,9 +15,13 @@ private final InterfacePersona interper;
 	Persona persona = interper.findById(dto.getIdpersona())
 	.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
 	
+	Persona personadb = new Persona();
+		personadb.setNombre(dto.getNombre);
+		personadb.setIdpersona(dto.getIdpersona());
+		personadb.setContrasenna(dto.getContrasenna);
+		personadb.setDetalles(dto.getDetalles());
 	
-	
-	
+	return interper.save(personadb);
 	
 	}
 	
