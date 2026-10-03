@@ -1,6 +1,6 @@
 package com.app.backbiblioteca.CajaInicio;
  import org.springframework.stereotype.Service;
-
+import java.util.List;
 @Service
 public class ServidoresPersona{
 private final InterfacePersona interper;
@@ -26,7 +26,10 @@ private final InterfacePersona interper;
 	}
 	
 	
+	public List<Persona>  listar(){
 	
+	return interper.findAll();
+	}
 	
 	
 	
