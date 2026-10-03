@@ -1,6 +1,9 @@
 package com.app.backbiblioteca.CajaInicio;
 import jakarta.persistence.*;
 import jakarta.persistence.validation.constraints.*;
+
+
+//Clase persona una clase destinada a combertirse en una tabla concolumnas 
 @Entity
 @Table(name = "persona")
 public class Persona{

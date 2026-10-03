@@ -7,14 +7,14 @@ import java.util.List;
 public class Controlladorp{
 private final ServidoresPersona persev;
 	public Controlladorp(ServidoresPersona persev){this.persev = persev;}
-
+//Conexion request inicial 
 @PostMapping("/Entrgar/")
 public ResponseEntity<Producto> crear(
 @Valid @RequestBody dtopersona dtoper) {
 Persona creado = persev.crear(dtoper);
 return ResponseEntity.status(HttpStatus.CREATED).body(creado);
 }
-
+//Por que la mayoria actua como funcion? acaso se puede crear endpoints con //void ?
 	@PostMapping("/Listar")
 	public List<Persona> listar(){
 	return persev.listar();

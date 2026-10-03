@@ -42,7 +42,7 @@ return this.Contrasenna;
 		public void setContrasenna(String Contrasenna){
 		this.Contrasenna =	Contrasenna}
 	
-	
+	//Enumerar de 1 al veinte 
 	public String getDetalles(){
 	
 	return this.Detalles;
