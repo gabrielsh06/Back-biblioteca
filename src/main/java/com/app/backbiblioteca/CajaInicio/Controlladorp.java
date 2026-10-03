@@ -22,7 +22,7 @@ return ResponseEntity.status(HttpStatus.CREATED).body(creado);
 @PutMapping("/Actualizar")
 	public Persona actualizar(@Valid @RequestBody dtopersona dtoper)
 	{
-	Persona creado = persev.actualizar(dtoper, dtoper.getIdpersona);
+	Persona creado = persev.actualizar(dtoper, dtoper.getIdpersona());
 return creado;
 	
 	
