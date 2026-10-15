@@ -27,4 +27,5 @@ public class Book {
     private Integer pages;
     private Integer stock;
     private Category[] category;
+    private Boolean isActive;
 }
