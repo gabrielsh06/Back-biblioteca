@@ -1,5 +1,14 @@
 package com.app.backbiblioteca.book.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +20,21 @@ import java.sql.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String author;
+    @Enumerated(EnumType.STRING)
     private BookStatus bookStatus;
+    @Enumerated(EnumType.STRING)
     private BookOrigin bookOrigin;
     private Integer likesCount;
     private String coverUrl;
+    @Column(name = "isbn")
     private String ISBN;
     private String sku;
     private String publisher;
@@ -26,6 +42,7 @@ public class Book {
     private String edition;
     private Integer pages;
     private Integer stock;
+    @Convert(converter = CategoryArrayConverter.class)
     private Category[] category;
     private Boolean isActive;
 }
