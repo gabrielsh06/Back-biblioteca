@@ -1,4 +1,4 @@
-package com.app.backbiblioteca.user;
+package com.app.backbiblioteca.user.domain;
 
 public enum Roles {
     CUSTOMER,
