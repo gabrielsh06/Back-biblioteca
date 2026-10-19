@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,7 +43,7 @@ public class Book {
     private String edition;
     private Integer pages;
     private Integer stock;
-    @Convert(converter = CategoryArrayConverter.class)
-    private Category[] category;
-    private Boolean isActive;
+    @Convert(converter = CategorySetConverter.class)
+    private Set<Category> category;
+    private Boolean active;
 }

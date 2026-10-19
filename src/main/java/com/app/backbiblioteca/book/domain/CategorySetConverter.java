@@ -4,31 +4,33 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Converter
-public class CategoryArrayConverter implements AttributeConverter<Category[], String> {
+public class CategorySetConverter implements AttributeConverter<Set<Category>, String> {
 
     @Override
-    public String convertToDatabaseColumn(Category[] categories) {
-        if (categories == null || categories.length == 0) {
+    public String convertToDatabaseColumn(Set<Category> categories) {
+        if (categories == null || categories.isEmpty()) {
             return null;
         }
 
-        return Arrays.stream(categories)
+        return categories.stream()
                 .map(Category::name)
                 .collect(Collectors.joining(","));
     }
 
     @Override
-    public Category[] convertToEntityAttribute(String value) {
+    public Set<Category> convertToEntityAttribute(String value) {
         if (value == null || value.isBlank()) {
-            return new Category[0];
+            return Collections.emptySet();
         }
 
         return Arrays.stream(value.split(","))
                 .map(String::trim)
                 .map(Category::valueOf)
-                .toArray(Category[]::new);
+                .collect(Collectors.toSet());
     }
 }
