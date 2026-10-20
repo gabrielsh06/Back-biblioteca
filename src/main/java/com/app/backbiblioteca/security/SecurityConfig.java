@@ -48,13 +48,18 @@ public class SecurityConfig {
                         // Endpoints de autenticación públicos
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Rutas de Swagger / OpenAPI públicas
+                        // Rutas de Swagger / OpenAPI / Webjars públicas
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
                         ).permitAll()
+
+                        // Despacho de errores interno y raíz
+                        .requestMatchers("/", "/error").permitAll()
 
                         // Consulta de libros pública (cualquiera puede ver el catálogo y detalle)
                         .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
@@ -85,7 +90,6 @@ public class SecurityConfig {
                 .map(String::trim)
                 .toList();
 
-        // Si se define "*" o hay orígenes específicos
         if (origins.contains("*")) {
             configuration.addAllowedOriginPattern("*");
         } else {
