@@ -4,6 +4,7 @@ import com.app.backbiblioteca.user.dto.request.UserCreateRequest;
 import com.app.backbiblioteca.user.dto.request.UserUpdateRequest;
 import com.app.backbiblioteca.user.dto.response.UserResponse;
 import com.app.backbiblioteca.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,13 +39,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> registerUser(@RequestBody UserCreateRequest userRequest) {
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserCreateRequest userRequest) {
         UserResponse createdUser = userService.registerUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userRequest) {
         return ResponseEntity.ok(userService.updateUser(id, userRequest));
     }
 

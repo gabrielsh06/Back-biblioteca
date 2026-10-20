@@ -4,6 +4,7 @@ import com.app.backbiblioteca.auth.dto.request.LoginRequest;
 import com.app.backbiblioteca.auth.dto.response.AuthResponse;
 import com.app.backbiblioteca.auth.service.AuthService;
 import com.app.backbiblioteca.user.dto.request.UserCreateRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody UserCreateRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserCreateRequest registerRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
     }
 }
