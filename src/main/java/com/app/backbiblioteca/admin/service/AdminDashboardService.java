@@ -4,6 +4,9 @@ import com.app.backbiblioteca.admin.dto.response.AdminDashboardResponse;
 import com.app.backbiblioteca.book.domain.Book;
 import com.app.backbiblioteca.book.repository.BookRepository;
 import com.app.backbiblioteca.user.repository.UserRepository;
+import com.app.backbiblioteca.loan.domain.LoanStatus;
+import com.app.backbiblioteca.loan.dto.response.MostBorrowedBookResponse;
+import com.app.backbiblioteca.loan.repository.LoanRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -15,10 +18,13 @@ public class AdminDashboardService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final LoanRepository loanRepository;
 
-    public AdminDashboardService(BookRepository bookRepository, UserRepository userRepository) {
+    public AdminDashboardService(BookRepository bookRepository, UserRepository userRepository,
+                                 LoanRepository loanRepository) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.loanRepository = loanRepository;
     }
 
     public AdminDashboardResponse getDashboard() {
@@ -62,7 +68,18 @@ public class AdminDashboardService {
                 activeUsers,
                 inactiveUsers,
                 booksByStatus,
-                booksByOrigin
+                booksByOrigin,
+                loanRepository.count(),
+                loanRepository.countByStatus(LoanStatus.ACTIVE),
+                loanRepository.countByStatus(LoanStatus.RETURNED),
+                loanRepository.countByStatus(LoanStatus.OVERDUE),
+                loanRepository.findMostBorrowed().stream()
+                        .limit(10)
+                        .map(row -> new MostBorrowedBookResponse(
+                                ((Number) row[0]).longValue(),
+                                (String) row[1],
+                                ((Number) row[2]).longValue()))
+                        .toList()
         );
     }
 }
