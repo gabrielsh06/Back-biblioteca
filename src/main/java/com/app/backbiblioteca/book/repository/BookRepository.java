@@ -7,8 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
+import java.util.List;
 
+public interface BookRepository extends JpaRepository<Book, Long> {
+  
+    long countByActiveTrue();
+    long countByActiveFalse();
+    List<Book> findByActiveTrue();
+  
     @Query("""
             SELECT b FROM Book b
             WHERE b.active = true
