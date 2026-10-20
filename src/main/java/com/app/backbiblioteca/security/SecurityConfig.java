@@ -73,6 +73,7 @@ public class SecurityConfig {
 
                         // Gestión de usuarios SOLO ADMIN
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
