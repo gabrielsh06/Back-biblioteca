@@ -6,6 +6,7 @@ import com.app.backbiblioteca.book.dto.response.BookLookupResponse;
 import com.app.backbiblioteca.book.dto.response.BookResponse;
 import com.app.backbiblioteca.book.service.BookService;
 import com.app.backbiblioteca.book.service.ExternalBookService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,13 +48,13 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookResponse> registerBook(@RequestBody BookCreateRequest bookRequest) {
+    public ResponseEntity<BookResponse> registerBook(@Valid @RequestBody BookCreateRequest bookRequest) {
         BookResponse createdBook = bookService.registerBook(bookRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody BookUpdateRequest bookRequest) {
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @Valid @RequestBody BookUpdateRequest bookRequest) {
         return ResponseEntity.ok(bookService.updateBook(id, bookRequest));
     }
 
