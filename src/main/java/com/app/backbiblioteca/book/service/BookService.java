@@ -1,11 +1,15 @@
 package com.app.backbiblioteca.book.service;
 
 import com.app.backbiblioteca.book.domain.Book;
+import com.app.backbiblioteca.book.domain.Category;
 import com.app.backbiblioteca.book.dto.request.BookCreateRequest;
 import com.app.backbiblioteca.book.dto.request.BookUpdateRequest;
 import com.app.backbiblioteca.book.dto.response.BookResponse;
 import com.app.backbiblioteca.book.repository.BookRepository;
+import com.app.backbiblioteca.common.dto.PageResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +35,14 @@ public class BookService {
                 .filter(Book::getActive)
                 .map(BookResponse::new)
                 .toList();
+    }
+
+    public PageResponse<BookResponse> getBooksPaged(String search, Category category, Pageable pageable) {
+        String categoryName = (category != null) ? category.name() : null;
+        String searchTerm = (search != null && !search.isBlank()) ? search.trim() : null;
+
+        Page<Book> booksPage = bookRepository.searchBooks(searchTerm, categoryName, pageable);
+        return PageResponse.from(booksPage.map(BookResponse::new));
     }
 
     public BookResponse registerBook(BookCreateRequest bookRequest) {
