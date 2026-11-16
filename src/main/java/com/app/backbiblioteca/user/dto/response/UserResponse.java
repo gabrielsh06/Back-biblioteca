@@ -9,7 +9,6 @@ public record UserResponse(
         String lastName,
         Roles roles,
         String email,
-        String password,
         boolean state
 ) {
     public UserResponse(User user) {
@@ -18,7 +17,6 @@ public record UserResponse(
                 user.getLastName(),
                 user.getRole(),
                 user.getEmail(),
-                user.getPassword(),
                 user.isActive());
     }
 }

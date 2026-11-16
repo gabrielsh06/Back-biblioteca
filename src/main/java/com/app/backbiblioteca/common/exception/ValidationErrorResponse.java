@@ -6,10 +6,11 @@ import java.util.Map;
 public record ValidationErrorResponse(
         int status,
         String error,
-        Map<String, String> fieldErrors,
+        String message,
+        Map<String, String> errors,
         LocalDateTime timestamp
 ) {
-    public ValidationErrorResponse(int status, String error, Map<String, String> fieldErrors) {
-        this(status, error, fieldErrors, LocalDateTime.now());
+    public ValidationErrorResponse(int status, String error, String message, Map<String, String> errors) {
+        this(status, error, message, errors, LocalDateTime.now());
     }
 }

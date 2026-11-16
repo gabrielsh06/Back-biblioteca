@@ -45,6 +45,9 @@ public class LoanService {
         if (book.getStock() == null || book.getStock() <= 0) {
             throw new IllegalStateException("Book is not available");
         }
+        if (book.getBookStatus() != BookStatus.AVAILABLE) {
+            throw new IllegalStateException("Book is not available for loan");
+        }
         if (loanRepository.existsByUserIdAndBookIdAndStatusIn(userId, book.getId(), OPEN_STATUSES)) {
             throw new IllegalStateException("User already has an active loan for this book");
         }
@@ -90,14 +93,14 @@ public class LoanService {
     @Transactional(readOnly = true)
     public List<LoanResponse> findMine(Long userId) {
         return loanRepository.findByUserIdOrderByLoanDateDesc(userId).stream()
-                .map(LoanResponse::new)
+                .map(this::toResponseWithCurrentStatus)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<LoanResponse> findAll() {
         return loanRepository.findAllByOrderByLoanDateDesc().stream()
-                .map(LoanResponse::new)
+                .map(this::toResponseWithCurrentStatus)
                 .toList();
     }
 
@@ -106,8 +109,15 @@ public class LoanService {
         return loanRepository.findByStatusInAndDueDateBefore(
                         List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE), LocalDate.now())
                 .stream()
-                .map(LoanResponse::new)
+                .map(this::toResponseWithCurrentStatus)
                 .toList();
+    }
+
+    private LoanResponse toResponseWithCurrentStatus(Loan loan) {
+        if (loan.getStatus() == LoanStatus.ACTIVE && loan.getDueDate().isBefore(LocalDate.now())) {
+            loan.setStatus(LoanStatus.OVERDUE);
+        }
+        return new LoanResponse(loan);
     }
 
     @Transactional

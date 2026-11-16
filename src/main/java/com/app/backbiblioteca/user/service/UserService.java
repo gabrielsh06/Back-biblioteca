@@ -44,9 +44,7 @@ public class UserService {
 
         User user = userRequest.toEntity();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getRole() == null) {
-            user.setRole(Roles.CUSTOMER);
-        }
+        user.setRole(user.getRole() == null ? Roles.CUSTOMER : user.getRole());
         user.setActive(true);
 
         return new UserResponse(userRepository.save(user));
