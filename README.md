@@ -38,6 +38,7 @@ predeterminados permiten ejecutar localmente con PostgreSQL:
 | `JWT_SECRET` | valor de desarrollo | Clave usada para firmar los tokens |
 | `JWT_EXPIRATION` | `86400000` | Duración del token en milisegundos |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:3000,http://localhost:5173,http://localhost:4200` | Orígenes permitidos separados por coma |
+| `FRONTEND_URL` | `http://localhost:4200` | URL base usada en los enlaces de recuperación de contraseña |
 
 En entornos reales se debe configurar un `JWT_SECRET` propio y seguro. No se
 deben usar los valores predeterminados para producción.
@@ -154,6 +155,10 @@ La respuesta contiene el token y los datos básicos del usuario.
 `GET /api/books` acepta los parámetros opcionales `search`, `category`, `page`,
 `size` y `sort`.
 
+Los ISBN son únicos. Crear un ISBN existente o cambiar un libro al ISBN de otro
+devuelve `409`. La eliminación es lógica (`active=false`) y se bloquea con `409`
+cuando existen préstamos `ACTIVE` u `OVERDUE` para el libro.
+
 ### Préstamos
 
 | Método | Ruta | Acceso |
@@ -173,6 +178,19 @@ curl -X POST http://localhost:8080/api/loans \
   -d '{"bookId": 1}'
 ```
 
+Los listados calculan `OVERDUE` cuando un préstamo `ACTIVE` tiene `dueDate`
+anterior a la fecha actual.
+
+### Donaciones
+
+| Método | Ruta | Acceso |
+| --- | --- | --- |
+| `POST` | `/api/donations` | Público |
+| `GET` | `/api/admin/donations` | `ADMIN` |
+| `GET` | `/api/admin/donations/{id}` | `ADMIN` |
+| `PUT` | `/api/admin/donations/{id}/status` | `ADMIN` |
+| `DELETE` | `/api/admin/donations/{id}` | `ADMIN` |
+
 ### Usuarios y dashboard administrativo
 
 | Método | Ruta | Acceso |
@@ -186,6 +204,9 @@ curl -X POST http://localhost:8080/api/loans \
 
 El dashboard incluye totales de libros, stock, usuarios, préstamos,
 agrupaciones por estado y origen, y los diez libros más prestados.
+
+`PUT /api/users/{id}` acepta `state` opcional. Si se envía `false`, el usuario
+queda suspendido y no puede iniciar sesión; si se omite, conserva su estado.
 
 ## Documentación OpenAPI
 

@@ -12,6 +12,8 @@ public record UserUpdateRequest(
 
         @NotBlank(message = "Email cannot be blank")
         @Email(message = "Must be a valid email address")
-        String email
+        String email,
+
+        Boolean state
 ) {
 }

@@ -6,8 +6,9 @@ import com.app.backbiblioteca.donation.dto.response.DonationResponse;
 import com.app.backbiblioteca.donation.service.DonationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import com.app.backbiblioteca.user.domain.User;
 
 import java.util.List;
 
@@ -34,7 +35,13 @@ public class AdminDonationController {
     public ResponseEntity<DonationResponse> updateStatus(
             @PathVariable Long id,
             @Valid @RequestBody DonationStatusRequest request,
-            Authentication authentication) {
-        return ResponseEntity.ok(donationService.updateStatus(id, request, authentication.getName()));
+            @AuthenticationPrincipal User admin) {
+        return ResponseEntity.ok(donationService.updateStatus(id, request, admin.getEmail()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        donationService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

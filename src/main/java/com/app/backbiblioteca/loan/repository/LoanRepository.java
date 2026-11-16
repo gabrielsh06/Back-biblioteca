@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     boolean existsByUserIdAndBookIdAndStatusIn(Long userId, Long bookId, List<LoanStatus> statuses);
+    boolean existsByBookIdAndStatusIn(Long bookId, List<LoanStatus> statuses);
     List<Loan> findByUserIdOrderByLoanDateDesc(Long userId);
     List<Loan> findAllByOrderByLoanDateDesc();
     long countByStatus(LoanStatus status);

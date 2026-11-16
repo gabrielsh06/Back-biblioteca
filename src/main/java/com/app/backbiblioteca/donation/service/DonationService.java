@@ -69,4 +69,12 @@ public class DonationService {
         donation.setReviewedBy(reviewer);
         return new DonationResponse(donationRepository.save(donation));
     }
+
+    @Transactional
+    public void delete(Long id) {
+        if (!donationRepository.existsById(id)) {
+            throw new EntityNotFoundException("Donación no encontrada");
+        }
+        donationRepository.deleteById(id);
+    }
 }
