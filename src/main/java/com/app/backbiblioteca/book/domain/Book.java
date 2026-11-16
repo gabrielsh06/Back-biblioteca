@@ -35,7 +35,7 @@ public class Book {
     private BookOrigin bookOrigin;
     private Integer likesCount;
     private String coverUrl;
-    @Column(name = "isbn")
+    @Column(name = "isbn", unique = true)
     private String ISBN;
     private String sku;
     private String publisher;
