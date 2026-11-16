@@ -1,8 +1,12 @@
 package com.app.backbiblioteca.auth.controller;
 
 import com.app.backbiblioteca.auth.dto.request.LoginRequest;
+import com.app.backbiblioteca.auth.dto.request.ForgotPasswordRequest;
+import com.app.backbiblioteca.auth.dto.request.ResetPasswordRequest;
 import com.app.backbiblioteca.auth.dto.response.AuthResponse;
+import com.app.backbiblioteca.auth.dto.response.MessageResponse;
 import com.app.backbiblioteca.auth.service.AuthService;
+import com.app.backbiblioteca.auth.service.PasswordResetService;
 import com.app.backbiblioteca.user.dto.request.UserCreateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, PasswordResetService passwordResetService) {
         this.authService = authService;
+        this.passwordResetService = passwordResetService;
     }
 
     @PostMapping("/login")
@@ -30,5 +36,18 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserCreateRequest registerRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MessageResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        passwordResetService.request(request.email());
+        return ResponseEntity.ok(new MessageResponse(
+                "Si el correo está registrado, recibirás un enlace para restablecer la contraseña."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<MessageResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        passwordResetService.reset(request);
+        return ResponseEntity.ok(new MessageResponse("Contraseña actualizada correctamente."));
     }
 }
