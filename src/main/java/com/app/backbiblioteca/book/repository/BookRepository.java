@@ -17,6 +17,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     long countByActiveTrue();
     long countByActiveFalse();
     List<Book> findByActiveTrue();
+    Optional<Book> findByISBN(String ISBN);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select b from Book b where b.id = :id")
