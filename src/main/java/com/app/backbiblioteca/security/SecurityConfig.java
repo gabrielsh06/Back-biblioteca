@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.time.Instant;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +42,21 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, ex) -> {
+                            response.setStatus(401);
+                            response.setContentType("application/json");
+                            response.getWriter().write(
+                                    "{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Token ausente, inválido o expirado\",\"timestamp\":\""
+                                            + Instant.now() + "\"}");
+                        })
+                        .accessDeniedHandler((request, response, ex) -> {
+                            response.setStatus(403);
+                            response.setContentType("application/json");
+                            response.getWriter().write(
+                                    "{\"status\":403,\"error\":\"Forbidden\",\"message\":\"No tienes permisos para este recurso\",\"timestamp\":\""
+                                            + Instant.now() + "\"}");
+                        }))
                 .authorizeHttpRequests(auth -> auth
                         // Peticiones preflight OPTIONS de CORS siempre permitidas
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -64,6 +80,7 @@ public class SecurityConfig {
                         // Consulta de libros pública (cualquiera puede ver el catálogo y detalle)
                         .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/books/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/donations").permitAll()
 
                         // Gestión de libros (lookup, crear, editar, borrar) SOLO ADMIN
                         .requestMatchers("/api/books/lookup/**").hasRole("ADMIN")

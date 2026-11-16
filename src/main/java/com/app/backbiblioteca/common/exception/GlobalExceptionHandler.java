@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
         ValidationErrorResponse error = new ValidationErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation Failed",
+                "Hay errores de validación en la solicitud",
                 errors
         );
 
